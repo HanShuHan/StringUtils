@@ -33,10 +33,12 @@ public class Main {
 //        System.out.println(StringUtils.indexOf("喔喔喔", 9));
 //        System.out.println(StringUtils.indexOf("", 9));
         //
-//        System.out.println(Arrays.toString(StringUtils.split("零一二三四A", -1, false)));
-//        System.out.println(Arrays.toString(StringUtils.split("零一二三四A", 0, false)));
+        System.out.println(Arrays.toString(StringUtils.split("零一二三四A", -1, false)));
+//        System.out.println(StringUtils.split("零一二三四A", -1, false)[0]);
+        System.out.println(Arrays.toString(StringUtils.split("零一二三四A", 0, false)));
         System.out.println(Arrays.toString(StringUtils.split("零一二三四A", 1, false)));
-//        System.out.println(Arrays.toString(StringUtils.split("零一二三四A", 2, false)));
+//        System.out.println(StringUtils.split("零一二三四A", 1, false)[0]);
+        System.out.println(Arrays.toString(StringUtils.split("零一二三四A", 2, false)));
 //        System.out.println(Arrays.toString(StringUtils.split("零一二三四A", 3, false)));
 //        System.out.println(Arrays.toString(StringUtils.split("零一二三四A", 30, false)));
         System.out.println(Arrays.toString(StringUtils.split("a一二三四A", 1, false)));
