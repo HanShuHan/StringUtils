@@ -7,6 +7,11 @@ import java.util.regex.Pattern;
 
 public class StringUtils {
 
+    private static final String halfWidthRange = "\u0000-\u00FF";
+    private static final String halfWidthKana = "\uFF61-\uFF9F";
+    private static final String regex = "[" + halfWidthRange + halfWidthKana + "]";
+    private static final Pattern pattern = Pattern.compile(regex);
+
     /**
      * @param character 欲檢查是否為半形或全形的 char
      * @return 半形：1；全形：2
@@ -28,13 +33,21 @@ public class StringUtils {
     }
 
     public static int widthOf(String str, int beginIndex, int endIndex) {
-        String subString = str.substring(beginIndex, endIndex);
-        return widthOf(subString);
+        int width = 0;
+        for(int i = beginIndex; i < endIndex; i++)
+            width += checkWidthOf(str.charAt(i));
+        return width;
+//        String subString = str.substring(beginIndex, endIndex);
+//        return widthOf(subString);
     }
 
     public static int widthOf(String str, int beginIndex) {
-        String subString = str.substring(beginIndex);
-        return widthOf(subString);
+        int width = 0;
+        for(int i = beginIndex; i < str.length(); i++)
+            width += checkWidthOf(str.charAt(i));
+        return width;
+//        String subString = str.substring(beginIndex);
+//        return widthOf(subString);
     }
 
     /**
@@ -42,11 +55,6 @@ public class StringUtils {
      * @return 全形：2；半形：1
      */
     private static int checkWidthOf(char character) {
-        String halfWidthRange = "\u0000-\u00FF";
-        String halfWidthKana = "\uFF61-\uFF9F";
-        String regex = "[" + halfWidthRange + halfWidthKana + "]";
-
-        final Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(String.valueOf(character));
         return matcher.matches() ? 1 : 2;
     }
@@ -78,13 +86,6 @@ public class StringUtils {
     public static String tailStringOfSliced(String str, int width, boolean includeCutChar) {
         String headString = slice(str, width, includeCutChar);
         return headString.length() < str.length() ? str.substring(headString.length()) : "";
-    }
-
-    public static boolean isLastIndex(int index, String str) {
-        if (str.equals(""))
-            return index == 0;
-        else
-            return index == str.length() - 1;
     }
 
     public static String[] split(String str, int width, boolean includeCutChar)
