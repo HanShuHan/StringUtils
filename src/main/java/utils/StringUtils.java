@@ -26,28 +26,19 @@ public class StringUtils {
      */
     public static int widthOf(String str) {
         int widths = 0;
-        char[] chars = str.toCharArray();
-        for (char c : chars)
-            widths += checkWidthOf(c);
+        for(int i = 0; i < str.length(); i++)
+            widths += checkWidthOf(str.charAt(i));
         return widths;
     }
 
     public static int widthOf(String str, int beginIndex, int endIndex) {
-        int width = 0;
-        for(int i = beginIndex; i < endIndex; i++)
-            width += checkWidthOf(str.charAt(i));
-        return width;
-//        String subString = str.substring(beginIndex, endIndex);
-//        return widthOf(subString);
+        String subString = str.substring(beginIndex, endIndex);
+        return widthOf(subString);
     }
 
     public static int widthOf(String str, int beginIndex) {
-        int width = 0;
-        for(int i = beginIndex; i < str.length(); i++)
-            width += checkWidthOf(str.charAt(i));
-        return width;
-//        String subString = str.substring(beginIndex);
-//        return widthOf(subString);
+        String subString = str.substring(beginIndex);
+        return widthOf(subString);
     }
 
     /**
@@ -57,6 +48,14 @@ public class StringUtils {
     private static int checkWidthOf(char character) {
         Matcher matcher = pattern.matcher(String.valueOf(character));
         return matcher.matches() ? 1 : 2;
+    }
+
+    /**
+     * @param str 欲切割的字串
+     * @param width 欲切割的長度(全形：2；半形：1)總計
+     */
+    public static void slice(String str, int width) {
+        slice(str, width, false);
     }
 
     /**
@@ -83,9 +82,19 @@ public class StringUtils {
         return str;
     }
 
+    public static String slice(String str, int afterWidth, int slicingWidth, boolean includeFirstCutChar, boolean includeSecondCutChar)
+    {
+        String subStr = tailStringOfSliced(str, afterWidth, !includeFirstCutChar);
+        return slice(subStr, slicingWidth, includeSecondCutChar);
+    }
+
     public static String tailStringOfSliced(String str, int width, boolean includeCutChar) {
         String headString = slice(str, width, includeCutChar);
         return headString.length() < str.length() ? str.substring(headString.length()) : "";
+    }
+
+    public static void split(String str, int width) {
+        split(str, width, false);
     }
 
     public static String[] split(String str, int width, boolean includeCutChar)
@@ -105,22 +114,43 @@ public class StringUtils {
         return strList.toArray(strings);
     }
 
-    public static int indexOf(String str, int fromWidth) {
+    public static int indexOf(String str, int fromWidth, boolean includeCutChar) {
         if (fromWidth <= 0)
             return -1;
 
         int currentWidth = 0;
         for (int i = 0; i < str.length(); i++) {
-            currentWidth += widthOf(str.charAt(i));
-            if (currentWidth >= fromWidth)
+            currentWidth += checkWidthOf(str.charAt(i));
+            if (currentWidth == fromWidth)
                 return i;
+            if (currentWidth > fromWidth)
+                return includeCutChar ? i : i - 1;
         }
-        return str.length() - 1;
+        return -1;
     }
 
-//    public static String slice(String str, int afterWidth, int slicingWidth, boolean includeCutChar)
-//    {
-//
-//    }
+    public static String leftPad(String str, int totalWidth, char ch)
+    {
+        int padRound = totalWidth - widthOf(str);
+        StringBuilder sb = new StringBuilder();
+        while(padRound > 0)
+        {
+            sb.append(ch);
+            padRound--;
+        }
+        return sb + str;
+    }
+
+    public static String rightPad(String str, int totalWidth, char ch)
+    {
+        int padRound = totalWidth - widthOf(str);
+        StringBuilder sb = new StringBuilder();
+        while(padRound > 0)
+        {
+            sb.append(ch);
+            padRound--;
+        }
+        return str + sb;
+    }
 
 }

@@ -1,5 +1,6 @@
 package utils;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,8 +28,11 @@ class StringUtilsTest {
 
     @Test
     void testWidthOf1() {
-        assertEquals(6, StringUtils.widthOf(",好ＬｶaA", 1, 5));
-        assertEquals(7, StringUtils.widthOf(",好ＬｶaA", 1, 6));
+//        assertEquals(3, StringUtils.widthOf(",好ＬｶaA", -1, 1));
+        assertEquals(2, StringUtils.widthOf(",好ＬｶaA", 1, 2));
+        assertEquals(2, StringUtils.widthOf(",好ＬｶaA", 4, 6));
+        assertEquals(0, StringUtils.widthOf(",好ＬｶaA", 1, 1));
+//        assertEquals(2, StringUtils.widthOf(",好ＬｶaA", 4, 11));
     }
 
     @Test
@@ -42,6 +46,20 @@ class StringUtilsTest {
         assertEquals(",好", StringUtils.slice(",好ＬｶaA", 4, false));
         assertEquals(",好ＬｶaA", StringUtils.slice(",好ＬｶaA", 40, false));
         assertEquals("", StringUtils.slice(",好ＬｶaA", 0, false));
+    }
+
+    @Test
+    void slice2() {
+        assertEquals("好Ｌ", StringUtils.slice(",好ＬｶaA", 2, 3, true, true));
+        assertEquals("好", StringUtils.slice(",好ＬｶaA", 2, 3, true, false));
+        assertEquals("Ｌ", StringUtils.slice(",好ＬｶaA", 2, 1, false, true));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", 2, 1, false, false));
+        assertEquals("Ｌｶ", StringUtils.slice(",好ＬｶaA", 2, 3, false, false));
+        assertEquals("ＬｶaA", StringUtils.slice(",好ＬｶaA", 2, 13, false, false));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", 12, -13, false, false));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", 12, 13, false, false));
+        assertEquals(",", StringUtils.slice(",好ＬｶaA", -12, 2, false, false));
+        assertEquals(",好", StringUtils.slice(",好ＬｶaA", -12, 2, false, true));
     }
 
     @Test
@@ -67,9 +85,36 @@ class StringUtilsTest {
 
     @Test
     void indexOf() {
-        assertEquals(1, StringUtils.indexOf(",好ＬｶaA", 2));
-        assertEquals(1, StringUtils.indexOf(",好ＬｶaA", 3));
-        assertEquals(5, StringUtils.indexOf(",好ＬｶaA", 11));
-        assertEquals(-1, StringUtils.indexOf(",好ＬｶaA", -1));
+        assertEquals(1, StringUtils.indexOf(",好ＬｶaA", 2, true));
+        assertEquals(0, StringUtils.indexOf(",好ＬｶaA", 2, false));
+        assertEquals(-1, StringUtils.indexOf(",好ＬｶaA", 11, true));
+        assertEquals(-1, StringUtils.indexOf(",好ＬｶaA", 11, false));
+        assertEquals(-1, StringUtils.indexOf(",好ＬｶaA", -1, true));
+        assertEquals(-1, StringUtils.indexOf(",好ＬｶaA", -1, false));
+        assertEquals(5, StringUtils.indexOf(",好ＬｶaA", 8, true));
+        assertEquals(5, StringUtils.indexOf(",好ＬｶaA", 8, false));
     }
+
+    @Test
+    void leftPad() {
+        assertEquals("123", StringUtils.leftPad("123", -1, 'x'));
+        assertEquals("123", StringUtils.leftPad("123", 0, 'x'));
+        assertEquals("123", StringUtils.leftPad("123", 1, 'x'));
+        assertEquals("123", StringUtils.leftPad("123", 3, 'x'));
+        assertEquals("xx123", StringUtils.leftPad("123", 5, 'x'));
+        assertEquals("x12Ｌ", StringUtils.leftPad("12Ｌ", 5, 'x'));
+        assertEquals("x12喔", StringUtils.leftPad("12喔", 5, 'x'));
+    }
+
+    @Test
+    void rightPad() {
+        assertEquals("123", StringUtils.rightPad("123", -1, 'x'));
+        assertEquals("123", StringUtils.rightPad("123", 0, 'x'));
+        assertEquals("123", StringUtils.rightPad("123", 1, 'x'));
+        assertEquals("123", StringUtils.rightPad("123", 3, 'x'));
+        assertEquals("123xx", StringUtils.rightPad("123", 5, 'x'));
+        assertEquals("12Ｌx", StringUtils.rightPad("12Ｌ", 5, 'x'));
+        assertEquals("12喔x", StringUtils.rightPad("12喔", 5, 'x'));
+    }
+
 }
