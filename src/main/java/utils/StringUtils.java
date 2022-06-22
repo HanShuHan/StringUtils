@@ -26,8 +26,9 @@ public class StringUtils {
      */
     public static int widthOf(String str) {
         int widths = 0;
-        for(int i = 0; i < str.length(); i++)
+        for(int i = 0; i < str.length(); i++){
             widths += checkWidthOf(str.charAt(i));
+        }
         return widths;
     }
 
