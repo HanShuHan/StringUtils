@@ -26,20 +26,6 @@ class StringUtilsTest {
     }
 
     @Test
-    void testWidthOf1() {
-//        assertEquals(3, StringUtils.widthOf(",好ＬｶaA", -1, 1));
-        assertEquals(2, StringUtils.widthOf(",好ＬｶaA", 1, 2));
-        assertEquals(2, StringUtils.widthOf(",好ＬｶaA", 4, 6));
-        assertEquals(0, StringUtils.widthOf(",好ＬｶaA", 1, 1));
-//        assertEquals(2, StringUtils.widthOf(",好ＬｶaA", 4, 11));
-    }
-
-    @Test
-    void testWidthOf2() {
-        assertEquals(5, StringUtils.widthOf(",好ＬｶaA", 2));
-    }
-
-    @Test
     void slice() {
         assertEquals(",好Ｌ", StringUtils.slice(",好Ｌ", 8, true));
         assertEquals(",好", StringUtils.slice(",好ＬｶaA", 4, false));
@@ -114,6 +100,46 @@ class StringUtilsTest {
         assertEquals("123xx", StringUtils.rightPad("123", 5, 'x'));
         assertEquals("12Ｌx", StringUtils.rightPad("12Ｌ", 5, 'x'));
         assertEquals("12喔x", StringUtils.rightPad("12喔", 5, 'x'));
+    }
+
+    @Test
+    void sliceRPad(){
+        assertEquals("", StringUtils.sliceRPad("喔A一一Ｌ", -1));
+        assertEquals("", StringUtils.sliceRPad("喔A一一Ｌ", 0));
+        assertEquals(" ", StringUtils.sliceRPad("喔A一一Ｌ", 1));
+        assertEquals("喔", StringUtils.sliceRPad("喔A一一Ｌ", 2));
+        assertEquals("喔A", StringUtils.sliceRPad("喔A一一Ｌ", 3));
+        assertEquals("喔A一一Ｌ    ", StringUtils.sliceRPad("喔A一一Ｌ", 13));
+    }
+
+    @Test
+    void sliceRPad2(){
+        assertEquals("", StringUtils.sliceRPad("喔A一一Ｌ", -1, 'x'));
+        assertEquals("", StringUtils.sliceRPad("喔A一一Ｌ", 0, 'x'));
+        assertEquals("x", StringUtils.sliceRPad("喔A一一Ｌ", 1, 'x'));
+        assertEquals("喔", StringUtils.sliceRPad("喔A一一Ｌ", 2, 'x'));
+        assertEquals("喔A", StringUtils.sliceRPad("喔A一一Ｌ", 3, 'x'));
+        assertEquals("喔A一一Ｌxxxx", StringUtils.sliceRPad("喔A一一Ｌ", 13, 'x'));
+    }
+
+    @Test
+    void sliceLPad(){
+        assertEquals("", StringUtils.sliceLPad("喔A一一Ｌ", -1));
+        assertEquals("", StringUtils.sliceLPad("喔A一一Ｌ", 0));
+        assertEquals(" ", StringUtils.sliceLPad("喔A一一Ｌ", 1));
+        assertEquals("喔", StringUtils.sliceLPad("喔A一一Ｌ", 2));
+        assertEquals("喔A", StringUtils.sliceLPad("喔A一一Ｌ", 3));
+        assertEquals("    喔A一一Ｌ", StringUtils.sliceLPad("喔A一一Ｌ", 13));
+    }
+
+    @Test
+    void sliceLPad2(){
+        assertEquals("", StringUtils.sliceLPad("喔A一一Ｌ", -1, 'x'));
+        assertEquals("", StringUtils.sliceLPad("喔A一一Ｌ", 0, 'x'));
+        assertEquals("x", StringUtils.sliceLPad("喔A一一Ｌ", 1, 'x'));
+        assertEquals("喔", StringUtils.sliceLPad("喔A一一Ｌ", 2, 'x'));
+        assertEquals("喔A", StringUtils.sliceLPad("喔A一一Ｌ", 3, 'x'));
+        assertEquals("xxxx喔A一一Ｌ", StringUtils.sliceLPad("喔A一一Ｌ", 13, 'x'));
     }
 
 }

@@ -7,22 +7,27 @@ import java.util.regex.Pattern;
 
 public class StringUtils {
 
+    // 半形字元 Unicode 區間
     private static final String halfWidthRange = "\u0000-\u00FF";
+    // 日文半形字元 Unicode 區間
     private static final String halfWidthKana = "\uFF61-\uFF9F";
+    // 組合
     private static final String regex = "[" + halfWidthRange + halfWidthKana + "]";
     private static final Pattern pattern = Pattern.compile(regex);
 
     /**
-     * @param character 欲檢查是否為半形或全形的 char
-     * @return 半形：1；全形：2
+     * 檢查字元，是否為半形、或全形字元。若是半形字元，則回傳 1；不然，則回傳 2
+     * @param character 欲檢查的字元
+     * @return 半形：1；全形 2
      */
     public static int widthOf(char character) {
         return checkWidthOf(character);
     }
 
     /**
-     * @param str 欲檢查是否為半形或全形的 string
-     * @return 半形：1；全形：2
+     * 檢查字串的總長度(半形：1；全形：2)
+     * @param str 欲檢查的字串
+     * @return 總長度(半形：1；全形：2)
      */
     public static int widthOf(String str) {
         int widths = 0;
@@ -32,38 +37,33 @@ public class StringUtils {
         return widths;
     }
 
-    public static int widthOf(String str, int beginIndex, int endIndex) {
-        String subString = str.substring(beginIndex, endIndex);
-        return widthOf(subString);
-    }
-
-    public static int widthOf(String str, int beginIndex) {
-        String subString = str.substring(beginIndex);
-        return widthOf(subString);
-    }
-
     /**
-     * @param character 欲檢查是否為半形或全形的 char
-     * @return 全形：2；半形：1
+     * 檢查字元，是否為半形、或全形字元。若是半形字元，則回傳 1；不然，則回傳 2
+     * @param character 欲檢查的字元
+     * @return 半形：1；全形 2
      */
     private static int checkWidthOf(char character) {
         Matcher matcher = pattern.matcher(String.valueOf(character));
+        // 符合半形字元 Unicode 區間，則回傳 1；不然，則回傳 2
         return matcher.matches() ? 1 : 2;
     }
 
     /**
+     * 回傳以半、全形的方式(半形：1、全形：2)，計算長度，切割後的字串；並且，不包含未被完整切割的字元
      * @param str 欲切割的字串
-     * @param width 欲切割的長度(全形：2；半形：1)總計
+     * @param width 欲切割的長度
+     * @return 切割後的字串
      */
-    public static void slice(String str, int width) {
-        slice(str, width, false);
+    public static String slice(String str, int width) {
+        return slice(str, width, false);
     }
 
     /**
-     * @param str            欲切割的字串
-     * @param width          欲切割的長度(全形：2；半形：1)總計
-     * @param includeCutChar 是否包括未被完整切割的字元
-     * @return 傳回值
+     * 回傳以半、全形的方式，計算長度(半形：1、全形：2)，切割後的字串
+     * @param str 欲切割的字串
+     * @param width 欲切割的長度
+     * @param includeCutChar 是否包含未被完整切割的字元
+     * @return 切割後的字串
      */
     public static String slice(String str, int width, boolean includeCutChar) {
         if (width <= 0)
@@ -83,10 +83,62 @@ public class StringUtils {
         return str;
     }
 
+    /**
+     *
+     * @param str
+     * @param afterWidth
+     * @param slicingWidth
+     * @param includeFirstCutChar
+     * @param includeSecondCutChar
+     * @return
+     */
     public static String slice(String str, int afterWidth, int slicingWidth, boolean includeFirstCutChar, boolean includeSecondCutChar)
     {
         String subStr = tailStringOfSliced(str, afterWidth, !includeFirstCutChar);
         return slice(subStr, slicingWidth, includeSecondCutChar);
+    }
+
+    /**
+     *
+     * @param str
+     * @param width
+     * @return
+     */
+    public static String sliceRPad(String str, int width)
+    {
+        String subString = slice(str, width, false);
+        return rightPad(subString, width, ' ');
+    }
+
+    /**
+     *
+     * @param str
+     * @param width
+     * @param ch
+     * @return
+     */
+    public static String sliceRPad(String str, int width, char ch)
+    {
+        String subString = slice(str, width, false);
+        return rightPad(subString, width, ch);
+    }
+
+    /**
+     *
+     * @param str
+     * @param width
+     * @return
+     */
+    public static String sliceLPad(String str, int width)
+    {
+        String subString = slice(str, width, false);
+        return leftPad(subString, width, ' ');
+    }
+
+    public static String sliceLPad(String str, int width, char ch)
+    {
+        String subString = slice(str, width, false);
+        return leftPad(subString, width, ch);
     }
 
     public static String tailStringOfSliced(String str, int width, boolean includeCutChar) {
@@ -94,8 +146,8 @@ public class StringUtils {
         return headString.length() < str.length() ? str.substring(headString.length()) : "";
     }
 
-    public static void split(String str, int width) {
-        split(str, width, false);
+    public static String[] split(String str, int width) {
+        return split(str, width, false);
     }
 
     public static String[] split(String str, int width, boolean includeCutChar)
@@ -130,6 +182,16 @@ public class StringUtils {
         return -1;
     }
 
+    /**
+     *
+     * @param str
+     * @param totalWidth
+     * @return
+     */
+    public static String leftPad(String str, int totalWidth) {
+        return leftPad(str, totalWidth, ' ');
+    }
+
     public static String leftPad(String str, int totalWidth, char ch)
     {
         int padRound = totalWidth - widthOf(str);
@@ -140,6 +202,11 @@ public class StringUtils {
             padRound--;
         }
         return sb + str;
+    }
+
+    public static String rightPad(String str, int totalWidth)
+    {
+        return rightPad(str, totalWidth, ' ');
     }
 
     public static String rightPad(String str, int totalWidth, char ch)
