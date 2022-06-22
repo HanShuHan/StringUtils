@@ -84,13 +84,13 @@ public class StringUtils {
     }
 
     /**
-     *
-     * @param str
-     * @param afterWidth
-     * @param slicingWidth
-     * @param includeFirstCutChar
-     * @param includeSecondCutChar
-     * @return
+     * 回傳以半、全形的方式(半形：1、全形：2)，計算長度，切割後的字串；並且，可以選擇是否包含未被完整切割的字元
+     * @param str 欲切割的字串
+     * @param afterWidth 從多少長度之後開始切割
+     * @param slicingWidth 欲切割多少長度的字串
+     * @param includeFirstCutChar @param afterWidth 的長度計算，是否包含若未被完整切割的字元
+     * @param includeSecondCutChar 新切割好的字串，是否包含末尾未被完整切割的字元
+     * @return 切割後的字串
      */
     public static String slice(String str, int afterWidth, int slicingWidth, boolean includeFirstCutChar, boolean includeSecondCutChar)
     {
@@ -99,48 +99,12 @@ public class StringUtils {
     }
 
     /**
-     *
-     * @param str
-     * @param width
-     * @return
+     * 回傳以半、全形的方式(半形：1、全形：2)，計算長度，切割字串後，所剩餘的字串
+     * @param str 欲切割的字串
+     * @param width 欲切割的字串長度
+     * @param includeCutChar 被切割的字串，是否要包含為末尾末被完整切割的字元
+     * @return 切割後剩餘的字串
      */
-    public static String sliceRPad(String str, int width)
-    {
-        String subString = slice(str, width, false);
-        return rightPad(subString, width, ' ');
-    }
-
-    /**
-     *
-     * @param str
-     * @param width
-     * @param ch
-     * @return
-     */
-    public static String sliceRPad(String str, int width, char ch)
-    {
-        String subString = slice(str, width, false);
-        return rightPad(subString, width, ch);
-    }
-
-    /**
-     *
-     * @param str
-     * @param width
-     * @return
-     */
-    public static String sliceLPad(String str, int width)
-    {
-        String subString = slice(str, width, false);
-        return leftPad(subString, width, ' ');
-    }
-
-    public static String sliceLPad(String str, int width, char ch)
-    {
-        String subString = slice(str, width, false);
-        return leftPad(subString, width, ch);
-    }
-
     public static String tailStringOfSliced(String str, int width, boolean includeCutChar) {
         String headString = slice(str, width, includeCutChar);
         return headString.length() < str.length() ? str.substring(headString.length()) : "";
@@ -150,6 +114,13 @@ public class StringUtils {
         return split(str, width, false);
     }
 
+    /**
+     * 將字串以固定長度切割後(計算方式：半形：1、全形：2)，依序存入陣列，回傳陣列
+     * @param str 欲切割的字串
+     * @param width 欲切割的字串長度
+     * @param includeCutChar 每一次切割，是否包含該段末尾未被完整切割的字元
+     * @return 切割處理後的字串陣列
+     */
     public static String[] split(String str, int width, boolean includeCutChar)
     {
         List<String> strList = new ArrayList<>();
@@ -167,31 +138,73 @@ public class StringUtils {
         return strList.toArray(strings);
     }
 
-    public static int indexOf(String str, int fromWidth, boolean includeCutChar) {
-        if (fromWidth <= 0)
-            return -1;
-
-        int currentWidth = 0;
-        for (int i = 0; i < str.length(); i++) {
-            currentWidth += checkWidthOf(str.charAt(i));
-            if (currentWidth == fromWidth)
-                return i;
-            if (currentWidth > fromWidth)
-                return includeCutChar ? i : i - 1;
-        }
-        return -1;
+    /**
+     * 以 slice(str, width, false) 方法，切割後的字串；使用 Right Padding 處理字串後，回傳
+     * @param str 欲處理的字串
+     * @param width 欲切割的總長度，以半、全形計算(半形：1、全形：2)
+     * @return 切割後的字串，以 Right Padding 處理，將字串右邊，以半形空白補滿後，回傳
+     */
+    public static String sliceRPad(String str, int width)
+    {
+        String subString = slice(str, width, false);
+        return rightPad(subString, width, ' ');
     }
 
     /**
-     *
-     * @param str
-     * @param totalWidth
-     * @return
+     * 以 slice(str, width, false) 方法，切割後的字串；使用 Right Padding 處理字串後，回傳
+     * @param str 欲處理的字串
+     * @param width 欲切割的總長度，以半、全形計算(半形：1、全形：2)
+     * @param ch 欲 Padding 的字元
+     * @return 切割後的字串，以 Right Padding 處理，將字串右邊，以選擇的字元補滿後，回傳
+     */
+    public static String sliceRPad(String str, int width, char ch)
+    {
+        String subString = slice(str, width, false);
+        return rightPad(subString, width, ch);
+    }
+
+    /**
+     * 以 slice(str, width, false) 方法，切割後的字串；使用 Left Padding 處理字串後，回傳
+     * @param str 欲處理的字串
+     * @param width 欲切割的總長度，以半、全形計算(半形：1、全形：2)
+     * @return 切割後的字串，以 Left Padding 處理，將字串左邊，以半形空白補滿後，回傳
+     */
+    public static String sliceLPad(String str, int width)
+    {
+        String subString = slice(str, width, false);
+        return leftPad(subString, width, ' ');
+    }
+
+    /**
+     * 以 slice(str, width, false) 方法，切割後的字串；使用 Left Padding 處理字串後，回傳
+     * @param str 欲處理的字串
+     * @param width 欲切割的總長度，以半、全形計算(半形：1、全形：2)
+     * @param ch 欲 Padding 的字元
+     * @return 切割後的字串，以 Left Padding 處理，將字串左邊，以選擇的字元補滿後，回傳
+     */
+    public static String sliceLPad(String str, int width, char ch)
+    {
+        String subString = slice(str, width, false);
+        return leftPad(subString, width, ch);
+    }
+
+    /**
+     * 將字串以 Left Padding 處理後，回傳
+     * @param str 欲加工處理的字串
+     * @param totalWidth 預期的字串總長度，以(半形：1；全形：2)的方式計算
+     * @return Left Padding 後的字串
      */
     public static String leftPad(String str, int totalWidth) {
         return leftPad(str, totalWidth, ' ');
     }
 
+    /**
+     * 將字串以所選擇的字元，做 Left Padding 處理後，回傳
+     * @param str 欲加工處理的字串
+     * @param totalWidth 預期的字串總長度，以(半形：1；全形：2)的方式計算
+     * @param ch 欲用來 Padding 的字元
+     * @return 處理後的字串
+     */
     public static String leftPad(String str, int totalWidth, char ch)
     {
         int padRound = totalWidth - widthOf(str);
@@ -204,11 +217,24 @@ public class StringUtils {
         return sb + str;
     }
 
+    /**
+     * 將字串以 Right Padding 處理後，回傳
+     * @param str 欲加工處理的字串
+     * @param totalWidth 預期的字串總長度，以(半形：1；全形：2)的方式計算
+     * @return Right Padding 後的字串
+     */
     public static String rightPad(String str, int totalWidth)
     {
         return rightPad(str, totalWidth, ' ');
     }
 
+    /**
+     * 將字串以所選擇的字元，做 Right Padding 處理後，回傳
+     * @param str 欲加工處理的字串
+     * @param totalWidth 預期的字串總長度，以(半形：1；全形：2)的方式計算
+     * @param ch 欲用來 Padding 的字元
+     * @return 處理後的字串
+     */
     public static String rightPad(String str, int totalWidth, char ch)
     {
         int padRound = totalWidth - widthOf(str);
