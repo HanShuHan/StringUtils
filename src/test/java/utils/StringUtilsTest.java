@@ -1,6 +1,5 @@
 package utils;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,7 +41,7 @@ class StringUtilsTest {
 
     @Test
     void slice() {
-        assertEquals(",好Ｌ", StringUtils.slice(",好ＬｶaA", 4, true));
+        assertEquals(",好Ｌ", StringUtils.slice(",好Ｌ", 8, true));
         assertEquals(",好", StringUtils.slice(",好ＬｶaA", 4, false));
         assertEquals(",好ＬｶaA", StringUtils.slice(",好ＬｶaA", 40, false));
         assertEquals("", StringUtils.slice(",好ＬｶaA", 0, false));
