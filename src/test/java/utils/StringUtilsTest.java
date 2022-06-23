@@ -48,6 +48,60 @@ class StringUtilsTest {
     }
 
     @Test
+    void slice3() {
+        assertEquals("", StringUtils.slice(",好ＬｶaA", -1, -1));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", -1, 0));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", -1, 1));
+
+        assertEquals("", StringUtils.slice(",好ＬｶaA", 0, -1));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", 0, 0));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", 0, 1));
+
+        assertEquals(",", StringUtils.slice(",好ＬｶaA", 1, -1));
+        assertEquals(",", StringUtils.slice(",好ＬｶaA", 1, 0));
+        assertEquals(",", StringUtils.slice(",好ＬｶaA", 1, 1));
+
+        assertEquals(" ,", StringUtils.slice(",好ＬｶaA", 2, -1));
+        assertEquals(",", StringUtils.slice(",好ＬｶaA", 2, 0));
+        assertEquals(", ", StringUtils.slice(",好ＬｶaA", 2, 1));
+
+        assertEquals(",好", StringUtils.slice(",好ＬｶaA", 3, -1));
+        assertEquals(",好", StringUtils.slice(",好ＬｶaA", 3, 0));
+        assertEquals(",好", StringUtils.slice(",好ＬｶaA", 3, 1));
+
+        assertEquals("   ,好ＬｶaA", StringUtils.slice(",好ＬｶaA", 11, -1));
+        assertEquals(",好ＬｶaA", StringUtils.slice(",好ＬｶaA", 11, 0));
+        assertEquals(",好ＬｶaA   ", StringUtils.slice(",好ＬｶaA", 11, 1));
+    }
+
+    @Test
+    void slice4() {
+        assertEquals("", StringUtils.slice(",好ＬｶaA", -1, -1, 'x'));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", -1, 0, 'x'));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", -1, 1, 'x'));
+
+        assertEquals("", StringUtils.slice(",好ＬｶaA", 0, -1, 'x'));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", 0, 0, 'x'));
+        assertEquals("", StringUtils.slice(",好ＬｶaA", 0, 1, 'x'));
+
+        assertEquals(",", StringUtils.slice(",好ＬｶaA", 1, -1, 'x'));
+        assertEquals(",", StringUtils.slice(",好ＬｶaA", 1, 0, 'x'));
+        assertEquals(",", StringUtils.slice(",好ＬｶaA", 1, 1, 'x'));
+
+        assertEquals("x,", StringUtils.slice(",好ＬｶaA", 2, -1, 'x'));
+        assertEquals(",", StringUtils.slice(",好ＬｶaA", 2, 0, 'x'));
+        assertEquals(",x", StringUtils.slice(",好ＬｶaA", 2, 1, 'x'));
+
+        assertEquals(",好", StringUtils.slice(",好ＬｶaA", 3, -1, 'x'));
+        assertEquals(",好", StringUtils.slice(",好ＬｶaA", 3, 0, 'x'));
+        assertEquals(",好", StringUtils.slice(",好ＬｶaA", 3, 1, 'x'));
+
+        assertEquals("xxx,好ＬｶaA", StringUtils.slice(",好ＬｶaA", 11, -1, 'x'));
+        assertEquals(",好ＬｶaA", StringUtils.slice(",好ＬｶaA", 11, 0, 'x'));
+        assertEquals(",好ＬｶaAxxx", StringUtils.slice(",好ＬｶaA", 11, 1, 'x'));
+    }
+
+    @Test
     void tailStringOfSliced() {
         assertEquals("ｶaA", StringUtils.tailStringOfSliced(",好ＬｶaA", 4, true));
         assertEquals("ＬｶaA", StringUtils.tailStringOfSliced(",好ＬｶaA", 4, false));
